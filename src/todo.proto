@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package todo;
+
+message ToDoItem {
+    string id = 1;
+    string title = 2;
+    bool isCompleted = 3;
+    string createdAt = 4;
+}
+
+message ToDoId {
+    string id = 1;
+}
+
+message ToDoTitle {
+    string title = 1;
+}
+
+message Empty {}
+
+service ToDoService {
+    rpc GetToDoItems (Empty) returns (stream ToDoItem);
+    rpc GetToDoItem (ToDoId) returns (ToDoItem);
+    rpc AddToDoItem (ToDoTitle) returns (ToDoItem);
+    rpc UpdateToDoItem (ToDoItem) returns (ToDoItem);
+    rpc DeleteToDoItem (ToDoId) returns (ToDoItem);
+}
