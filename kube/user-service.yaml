@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+  namespace: grp5
+spec:
+  selector:
+    app: user
+  ports:
+  - protocol: TCP
+    port: 4002
+    targetPort: 4002
+  type: ClusterIP

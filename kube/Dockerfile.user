@@ -1,0 +1,22 @@
+FROM node:20 AS builder
+
+WORKDIR /app
+
+COPY package*.json .
+COPY tsconfig.json .
+COPY . .
+
+RUN npm install
+
+COPY src src 
+CMD ["tail", "-f", "/dev/null"]
+RUN npm run build
+
+FROM node:20 as production_stage
+WORKDIR /app
+EXPOSE 4002
+COPY --from=builder /app/dist /app/package.json /app/package-lock.json /app/tsconfig.json ./
+
+RUN npm ci --omit=dev
+
+CMD ["node", "/app/dist/index.js"]

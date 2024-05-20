@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-deployment
+  namespace: grp5
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo
+  template:
+    metadata:
+      labels:
+        app: todo
+    spec:
+      containers:
+      - name: todo
+        image: your-docker-repo/todo-service:latest
+        ports:
+        - containerPort: 4001
+        env:
+        - name: MONGODB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: MONGO_INITDB_ROOT_USERNAME
+        - name: MONGODB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: MONGO_INITDB_ROOT_PASSWORD
+        - name: MONGODB_DBNAME
+          valueFrom:
+            configMapKeyRef:
+              name: todo-config
+              key: dbname
+        - name: MONGODB_HOSTNAME
+          valueFrom:
+            configMapKeyRef:
+              name: todo-config
+              key: hostname
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "64Mi"
+          limits:
+            cpu: "500m"
+            memory: "128Mi"

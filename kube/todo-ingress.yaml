@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: todo-ingress
+  namespace: grp5
+spec:
+  ingressClassName: "nginx"
+  rules:
+  - host: your-domain.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/grp-5/todo"
+        backend:
+          service:
+            name: todo-service
+            port:
+              number: 4001
